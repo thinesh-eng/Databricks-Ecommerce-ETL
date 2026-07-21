@@ -1,0 +1,42 @@
+name: Databricks ETL CI
+
+on:
+  push:
+    branches:
+      - main
+      - feature/**
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Show Repository Files
+        run: |
+          echo "Repository Structure"
+          ls -R
+
+      - name: Validate Notebook Folder
+        run: |
+          if [ -d notebooks ]; then
+            echo "Notebook folder found"
+          else
+            echo "Notebook folder missing"
+            exit 1
+          fi
+
+      - name: CI Successful
+        run: echo "Databricks ETL Repository Validation Completed Successfully"
